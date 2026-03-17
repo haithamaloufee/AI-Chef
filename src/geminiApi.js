@@ -10,7 +10,7 @@ const modelName = "gemini-2.5-flash-lite"
 
 export async function getRecipeFromGemini(ingredientsArr) {
   if (!apiKey) {
-    throw new Error("Missing Gemini API key. Add VITE_GEMINI_KEY to .env and restart Vite.")
+    throw new Error(getMissingApiKeyMessage())
   }
 
   const ingredients = normalizeIngredients(ingredientsArr)
@@ -99,4 +99,15 @@ function cleanGeminiMessage(message) {
     .replace(/^\[GoogleGenerativeAI Error\]:\s*/i, "")
     .replace(/^Error fetching from .*?: \[[^\]]+\]\s*/i, "")
     .trim()
+}
+
+function getMissingApiKeyMessage() {
+  if (import.meta.env.PROD) {
+    return (
+      "Missing Gemini API key in this deployed build. Add VITE_GEMINI_KEY in your hosting environment settings " +
+      "(for Vercel: Project Settings -> Environment Variables), then redeploy."
+    )
+  }
+
+  return "Missing Gemini API key. Add VITE_GEMINI_KEY to .env and restart Vite."
 }
