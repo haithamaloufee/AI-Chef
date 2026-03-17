@@ -1,8 +1,9 @@
 import React from "react"
-import Resipe from "./main_components/Recipe.jsx"
+import Recipe from "./main_components/Recipe.jsx"
 import RecipeSkeleton from "./main_components/RecipeSkeleton.jsx"
 import IngredientsList from "./main_components/IngredientsList.jsx"
 import { getRecipeFromGemini } from "../geminiApi.js"
+import { normalizeIngredient } from "../utils/ingredients.js"
 
 export default function Main() {
   const [ingredients, setIngredients] = React.useState([])
@@ -20,6 +21,52 @@ export default function Main() {
     }
   }, [isLoading, recipe, errorMessage])
 
+  function addIngredient(rawIngredient) {
+    const nextIngredient = normalizeIngredient(rawIngredient)
+
+    if (!nextIngredient) {
+      return { error: "Please enter an ingredient first." }
+    }
+
+    const ingredientAlreadyExists = ingredients.some(
+      (ingredient) => ingredient.toLowerCase() === nextIngredient.toLowerCase()
+    )
+
+    if (ingredientAlreadyExists) {
+      return { error: `"${nextIngredient}" is already in your list.` }
+    }
+
+    setIngredients((prevIngredients) => [...prevIngredients, nextIngredient])
+    setRecipe("")
+    setErrorMessage("")
+
+    return { ok: true }
+  }
+
+  function removeIngredient(ingredientToRemove) {
+    if (isLoading) {
+      return
+    }
+
+    setIngredients((prevIngredients) =>
+      prevIngredients.filter(
+        (ingredient) => ingredient.toLowerCase() !== ingredientToRemove.toLowerCase()
+      )
+    )
+    setRecipe("")
+    setErrorMessage("")
+  }
+
+  function clearIngredients() {
+    if (isLoading) {
+      return
+    }
+
+    setIngredients([])
+    setRecipe("")
+    setErrorMessage("")
+  }
+
   async function getRecipe() {
     if (ingredients.length < 3 || isLoading) {
       return
@@ -34,7 +81,9 @@ export default function Main() {
       setRecipe(recipeMarkdown)
     } catch (error) {
       console.error(error)
-      setErrorMessage("Error generating recipe. Please check your key and try again.")
+      setErrorMessage(
+        error instanceof Error ? error.message : "Unable to generate a recipe right now."
+      )
     } finally {
       setIsLoading(false)
     }
@@ -44,14 +93,16 @@ export default function Main() {
     <main>
       <IngredientsList
         ingredients={ingredients}
-        setIngredients={setIngredients}
+        addIngredient={addIngredient}
+        removeIngredient={removeIngredient}
+        clearIngredients={clearIngredients}
         getRecipe={getRecipe}
         isLoading={isLoading}
       />
 
       <div ref={resultRef}>
         {isLoading ? <RecipeSkeleton /> : null}
-        {!isLoading && recipe ? <Resipe recipe={recipe} /> : null}
+        {!isLoading && recipe ? <Recipe recipe={recipe} /> : null}
         {!isLoading && errorMessage ? (
           <p className="recipe-error" role="alert">
             {errorMessage}

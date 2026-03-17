@@ -97,26 +97,107 @@ form {
   transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
+.add-ingredient-form > button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+  box-shadow: none;
+}
+
 .add-ingredient-form > button:hover,
 .get-recipe-container > button:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
 }
 
+.ingredient-error {
+  margin: 12px auto 0;
+  max-width: 562px;
+  color: #a4452e;
+  font-size: 0.9rem;
+}
+
+.ingredients-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.ingredients-header h2 {
+  margin: 0;
+}
+
+.clear-ingredients-button,
+.ingredient-remove-button {
+  border: none;
+  border-radius: 999px;
+  background: #efe4dd;
+  color: #a4452e;
+  cursor: pointer;
+  font-family: Inter, sans-serif;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.clear-ingredients-button {
+  padding: 10px 14px;
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+
+.ingredient-remove-button {
+  padding: 6px 10px;
+  font-size: 0.8rem;
+}
+
+.clear-ingredients-button:hover,
+.ingredient-remove-button:hover {
+  background: #e7d4ca;
+  color: #7f321f;
+  transform: translateY(-1px);
+}
+
+.clear-ingredients-button:disabled,
+.ingredient-remove-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+}
+
 ul.ingredients-list {
+  list-style: none;
+  margin-top: 16px;
   margin-bottom: 48px;
-  padding-left: 22px;
+  padding-left: 0;
 }
 
 ul.ingredients-list > li {
   color: #475467;
-  line-height: 28px;
   transition: color 0.2s ease, transform 0.2s ease;
 }
 
 ul.ingredients-list > li:hover {
   color: #141413;
   transform: translateX(3px);
+}
+
+.ingredient-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.ingredient-list-item + .ingredient-list-item {
+  margin-top: 10px;
+}
+
+.ingredient-list-item span {
+  line-height: 1.5;
 }
 
 .get-recipe-container {
@@ -276,9 +357,17 @@ ul.ingredients-list > li:hover {
     align-items: stretch;
   }
 
+  .ingredients-header,
+  .ingredient-list-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
   .add-ingredient-form > input,
   .add-ingredient-form > button,
-  .get-recipe-container > button {
+  .get-recipe-container > button,
+  .clear-ingredients-button,
+  .ingredient-remove-button {
     max-width: none;
     width: 100%;
   }
