@@ -4,7 +4,6 @@ import RecipeSkeleton from "./main_components/RecipeSkeleton.jsx"
 import IngredientsList from "./main_components/IngredientsList.jsx"
 import { getRecipeFromGemini } from "../geminiApi.js"
 import { normalizeIngredient } from "../utils/ingredients.js"
-
 export default function Main() {
   const [ingredients, setIngredients] = React.useState([])
   const [recipe, setRecipe] = React.useState("")
@@ -90,7 +89,7 @@ export default function Main() {
   }
 
   return (
-    <main>
+    <main className="main-background">
       <IngredientsList
         ingredients={ingredients}
         addIngredient={addIngredient}
