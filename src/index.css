@@ -11,7 +11,6 @@ body,
 body {
   margin: 0;
   font-family: "Inter", sans-serif;
-  background-color: #fafaf8;
   color: #141413;
 }
 
@@ -24,11 +23,14 @@ body {
 
 .page-shell::before {
   content: "";
-  position: fixed;
-  inset: 0;
+  position: absolute;
+  top: 80px;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: -1;
   pointer-events: none;
-  background: linear-gradient(180deg, #fafaf8 0%, #f5f1ea 55%, #fafaf8 100%);
+  background: url("./assets/chef-website-background.jpg") center/cover no-repeat;
 }
 
 header {
@@ -56,6 +58,7 @@ main {
   max-width: 900px;
   margin: 0 auto;
   width: 100%;
+  min-height: calc(100vh - 80px);
 }
 
 form {
